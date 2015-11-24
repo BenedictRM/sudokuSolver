@@ -43,7 +43,7 @@ Ncubed = N^3;%placeholder
 [z,x] = size(A5);
 %%These four rules are 16x64 in size all with b = 1 for 4x4 case
 A1 = zeros(Nsquared,Ncubed);%%Place holder
-A2 = zeros(Nsquared,Ncubed);%%Place holder
+A2 = rule2(m);
 A3 = rule3(m);
 A4 = rule4(m);
 %%Store all constraints in single matrix
