@@ -34,7 +34,7 @@ binaryProblem = convert_to_binary(initialProblem);
 
 %%Build 'A' matrix based on sudoku rules
 N = m;%place holder
-Nsquared = N ^2;%place holder
+Nsquared = N^2;%place holder
 Ncubed = N^3;%placeholder
 %%Clue matrix is variable in size based on how many clues we get, dim is
 %%dimension of original prob
@@ -44,20 +44,23 @@ Ncubed = N^3;%placeholder
 %%These four rules are 16x64 in size all with b = 1 for 4x4 case
 A1 = zeros(Nsquared,Ncubed);%%Place holder
 A2 = zeros(Nsquared,Ncubed);%%Place holder
-A3 = zeros(Nsquared,Ncubed);%%Place holder
+A3 = rule3(m);
 A4 = rule4(m);
-A = [A1;A2;A3;A4];%%Construct giant matrix
-%%Get size of A matrix to correctly set b
-[r,c] = size(A);
-%%B vector is all ones to enforce rules, nice and easy
-b = [ones(r,1)];
+%%Store all constraints in single matrix
+A = [A1;A2;A3;A4;A5];%%Construct giant matrix
+%%This matrix (B) is only for getting b for matrices A1-A4
+B = [A1;A2;A3;A4];
+%%Get size of B matrix to correctly set b for A1-A4
+[r,c] = size(B);
+%%b vector is all ones to enforce rules with exception to b5, nice and easy
+b = [ones(r,1);b5];
 
 %%*******Final solution will look something like this:****
 %%This will need to get tweaked, not sure how to feed correct vals
 %%Guessing L1 based on x vector
 %%get L1 norm so we solve w.r.t. to L1 
-%L1 = norm(binaryProblem,1);%returns the L1 norm of matrix x (first position)
-%L1 = linprog(binaryProblem,A,b);%%Final prob will look like this once constraints done
+%%L1 = norm(binaryProblem,1);%returns the L1 norm of matrix x (first position)
+%%L1 = linprog(binaryProblem,A,b);%%Final prob will look like this once constraints done
 %%*****end of example******
 
 %%Restore to original matrix form
