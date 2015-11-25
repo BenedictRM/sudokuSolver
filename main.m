@@ -16,13 +16,8 @@ Each integer (1-m (number of rows))should only show up once:
 %}
 
 %%test data (a 4x4 puzzle with known solution)
-%%first example forgets a 2 for some reason
-%%initialProblem = ([0,0,4,0;1,0,0,0;0,0,0,3;0,1,0,0])
-%%Alternative 4x4 sudoku to check initialization stuff
+%%initialProblem = ([0,0,4,0;1,0,0,0;0,0,0,3;0,1,0,0])%%from lecture
 %%initialProblem = ([3,4,1,0;0,2,0,0;0,0,2,0;0,1,4,3])%%solves correctly
-%%test data (a 9x9 puzzle with known solution, 1. in pdf)
-initialProblem = ([7,2,3,0,0,0,1,5,9;6,0,0,3,0,2,0,0,8;8,0,0,0,1,0,0,0,2;0,7,0,6,5,4,0,2,0;0,0,4,2,0,7,3,0,0;0,5,0,9,3,1,0,4,0;5,0,0,0,7,0,0,0,3;4,0,0,1,0,3,0,0,6;9,3,2,0,0,0,7,1,4])
-
 %%other 4x4 problems
 %%initialProblem = ([1,0,0,3;0,0,4,0;0,1,0,0;2,0,0,4])
 %%from attached 4x4 sheet: These are off the top row
@@ -30,6 +25,19 @@ initialProblem = ([7,2,3,0,0,0,1,5,9;6,0,0,3,0,2,0,0,8;8,0,0,0,1,0,0,0,2;0,7,0,6
 %%initialProblem = ([0,3,0,2;0,0,1,0;0,4,0,0;3,0,2,0])%%gives same solution
 %%initialProblem = ([3,0,2,0;0,2,0,0;0,0,1,0;0,1,0,4])%%gives same solution
 %%initialProblem = ([0,0,2,0;4,0,0,3;1,0,0,2;0,4,0,0])%%gives same solution
+
+%%test data (a 9x9 puzzle with known solution, 1. in pdf)
+%%Easy 9x9
+%%1
+%%initialProblem = ([7,2,3,0,0,0,1,5,9;6,0,0,3,0,2,0,0,8;8,0,0,0,1,0,0,0,2;0,7,0,6,5,4,0,2,0;0,0,4,2,0,7,3,0,0;0,5,0,9,3,1,0,4,0;5,0,0,0,7,0,0,0,3;4,0,0,1,0,3,0,0,6;9,3,2,0,0,0,7,1,4])
+%%3
+%%initialProblem = ([1,0,0,0,0,0,0,0,9;0,4,0,2,6,1,0,3,0;0,6,0,0,5,0,0,1,0;0,0,5,6,0,3,4,0,0;8,1,4,7,0,5,3,9,6;0,0,9,0,1,0,7,0,0;0,0,0,9,3,4,0,0,0;4,8,0,5,7,2,0,6,3;3,0,0,0,0,0,0,0,5])
+
+%%Difficult 9x9
+%%1
+initialProblem = ([0,0,4,0,0,0,3,0,0;2,0,0,7,0,9,0,0,8;0,6,0,5,0,4,0,7,0;0,0,5,0,7,0,2,0,0;4,0,0,3,0,5,0,0,9;0,0,7,0,9,0,5,0,0;0,4,0,9,0,2,0,5,0;8,0,0,6,0,7,0,0,2;0,0,9,0,0,0,1,0,0])
+%%2
+%%initialProblem = ([1,5,0,3,0,6,0,8,9;4,0,0,0,0,0,0,0,2;0,0,0,4,2,8,0,0,0;9,0,5,0,3,0,8,0,6;0,0,3,1,0,9,7,0,0;2,0,6,0,5,0,3,0,1;0,0,0,2,1,3,0,0,0;7,0,0,0,0,0,0,0,3;3,9,0,6,0,7,0,5,8])
 
 %%Hold original problem size:
 [m,n] = size(initialProblem);
@@ -45,12 +53,11 @@ binaryProblem = convert_to_binary(initialProblem);
 %%Build 'A' matrix based on sudoku rules
 N = m;%place holder
 Nsquared = N^2;%place holder
-Ncubed = N^3;%placeholder
+Ncubed = N^3;%This gets used in call to cvx
 %%Clue matrix is variable in size based on how many clues we get, dim is
 %%dimension of original prob
 [A5,b5] = rule5(binaryProblem,N);
-%%Just checking correct size of clue matrix
-[z,x] = size(A5);
+
 %%These four rules are 16x64 in size all with b = 1 for 4x4 case
 %%I *think this works for 9x9, may be wrong, this will be the problem child
 A1 = rule1(m); %%Fails on 9x9, all other rules good!
