@@ -17,11 +17,20 @@ Each integer (1-m (number of rows))should only show up once:
 
 %%test data (a 4x4 puzzle with known solution)
 %%first example forgets a 2 for some reason
-initialProblem = ([0,0,4,0;1,0,0,3;0,0,0,0;0,1,0,0])
+initialProblem = ([0,0,4,0;1,0,0,0;0,0,0,3;0,1,0,0])
 %%Alternative 4x4 sudoku to check initialization stuff
 %%initialProblem = ([3,4,1,0;0,2,0,0;0,0,2,0;0,1,4,3])%%solves correctly
 %%test data (a 9x9 puzzle with known solution, 1. in pdf)
-%%initialProblem = initialProblem = ([])
+%%initialProblem = ([7,2,3,0,0,0,1,5,9;6,0,0,3,0,2,0,0,8;8,0,0,0,1,0,0,0,2;0,7,0,6,5,4,0,2,0;0,0,4,2,0,7,3,0,0;0,5,0,9,3,1,0,4,0;5,0,0,0,7,0,0,0,3;4,0,0,1,0,3,0,0,6;9,3,2,0,0,0,7,1,4])
+
+%%other 4x4 problems
+%%initialProblem = ([1,0,0,3;0,0,4,0;0,1,0,0;2,0,0,4])
+%%from attached 4x4 sheet: These are off the top row
+%%initialProblem = ([0,0,4,0;3,0,0,2;1,0,0,4;0,3,0,0])%%gives same solution
+%%initialProblem = ([0,3,0,2;0,0,1,0;0,4,0,0;3,0,2,0])%%gives same solution
+%%initialProblem = ([3,0,2,0;0,2,0,0;0,0,1,0;0,1,0,4])%%gives same solution
+%%initialProblem = ([0,0,2,0;4,0,0,3;1,0,0,2;0,4,0,0])%%gives same solution
+
 %%Hold original problem size:
 [m,n] = size(initialProblem);
 
@@ -57,23 +66,7 @@ B = [A1;A2;A3;A4];
 %%b vector is all ones to enforce rules with exception to b5, nice and easy
 b = [ones(r,1);b5];
 
-%%*******Final solution will look something like this:****
-%%This will need to get tweaked, not sure how to feed correct vals
-%%Guessing L1 based on x vector
-%%get L1 norm so we solve w.r.t. to L1 
-%{
-[m2, n2] = size(A); 
-f = [zeros(n2, 1); ones(n2, 1)];
-Ai = [-eye(n2), -eye(n2); eye(n2), -eye(n2)];
-bi = zeros(2*n2, 1);
-x = linprog(f, Ai, bi, [A, zeros(m2, n2)], b)
-x = x(1:n2);
-%}
-%%L1 = norm(binaryProblem,1);%returns the L1 norm of matrix x (first position)
-%%binaryProblem = linprog(f,A,b);%%Final prob will look like this once constraints done
-%%*****end of example******
-
-%%CVX attempt
+%%CVX Solver
 cvx_begin
 variables binaryProblem(Ncubed)
 minimize(norm(binaryProblem,1))
