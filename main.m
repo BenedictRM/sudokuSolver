@@ -35,9 +35,9 @@ Each integer (1-m (number of rows))should only show up once:
 
 %%Difficult 9x9
 %%1
-initialProblem = ([0,0,4,0,0,0,3,0,0;2,0,0,7,0,9,0,0,8;0,6,0,5,0,4,0,7,0;0,0,5,0,7,0,2,0,0;4,0,0,3,0,5,0,0,9;0,0,7,0,9,0,5,0,0;0,4,0,9,0,2,0,5,0;8,0,0,6,0,7,0,0,2;0,0,9,0,0,0,1,0,0])
+%%initialProblem = ([0,0,4,0,0,0,3,0,0;2,0,0,7,0,9,0,0,8;0,6,0,5,0,4,0,7,0;0,0,5,0,7,0,2,0,0;4,0,0,3,0,5,0,0,9;0,0,7,0,9,0,5,0,0;0,4,0,9,0,2,0,5,0;8,0,0,6,0,7,0,0,2;0,0,9,0,0,0,1,0,0])
 %%2
-%%initialProblem = ([1,5,0,3,0,6,0,8,9;4,0,0,0,0,0,0,0,2;0,0,0,4,2,8,0,0,0;9,0,5,0,3,0,8,0,6;0,0,3,1,0,9,7,0,0;2,0,6,0,5,0,3,0,1;0,0,0,2,1,3,0,0,0;7,0,0,0,0,0,0,0,3;3,9,0,6,0,7,0,5,8])
+initialProblem = ([1,5,0,3,0,6,0,8,9;4,0,0,0,0,0,0,0,2;0,0,0,4,2,8,0,0,0;9,0,5,0,3,0,8,0,6;0,0,3,1,0,9,7,0,0;2,0,6,0,5,0,3,0,1;0,0,0,2,1,3,0,0,0;7,0,0,0,0,0,0,0,3;3,9,0,6,0,7,0,5,8])
 
 %%Hold original problem size:
 [m,n] = size(initialProblem);
@@ -82,10 +82,19 @@ subject to
 A*binaryProblem==b;
 cvx_end
 
-%%Show initialProblem again for comparison
-disp(initialProblem)
 %%Restore to original matrix form
-solution = convert_to_integer(binaryProblem)
+solution = convert_to_integer(binaryProblem);
+
+%%draw sudoku function only set up for 4x4 or 9x9 problems
+if(N == 4 || N == 9)
+    drawSudoku(initialProblem)
+    drawSudoku(solution)
+    
+else
+    %%Show initialProblem again for comparison
+    disp(initialProblem)
+    disp(solution)
+end
 
 end
 
