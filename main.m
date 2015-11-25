@@ -17,11 +17,11 @@ Each integer (1-m (number of rows))should only show up once:
 
 %%test data (a 4x4 puzzle with known solution)
 %%first example forgets a 2 for some reason
-initialProblem = ([0,0,4,0;1,0,0,0;0,0,0,3;0,1,0,0])
+%%initialProblem = ([0,0,4,0;1,0,0,0;0,0,0,3;0,1,0,0])
 %%Alternative 4x4 sudoku to check initialization stuff
 %%initialProblem = ([3,4,1,0;0,2,0,0;0,0,2,0;0,1,4,3])%%solves correctly
 %%test data (a 9x9 puzzle with known solution, 1. in pdf)
-%%initialProblem = ([7,2,3,0,0,0,1,5,9;6,0,0,3,0,2,0,0,8;8,0,0,0,1,0,0,0,2;0,7,0,6,5,4,0,2,0;0,0,4,2,0,7,3,0,0;0,5,0,9,3,1,0,4,0;5,0,0,0,7,0,0,0,3;4,0,0,1,0,3,0,0,6;9,3,2,0,0,0,7,1,4])
+initialProblem = ([7,2,3,0,0,0,1,5,9;6,0,0,3,0,2,0,0,8;8,0,0,0,1,0,0,0,2;0,7,0,6,5,4,0,2,0;0,0,4,2,0,7,3,0,0;0,5,0,9,3,1,0,4,0;5,0,0,0,7,0,0,0,3;4,0,0,1,0,3,0,0,6;9,3,2,0,0,0,7,1,4])
 
 %%other 4x4 problems
 %%initialProblem = ([1,0,0,3;0,0,4,0;0,1,0,0;2,0,0,4])
@@ -53,7 +53,7 @@ Ncubed = N^3;%placeholder
 [z,x] = size(A5);
 %%These four rules are 16x64 in size all with b = 1 for 4x4 case
 %%I *think this works for 9x9, may be wrong, this will be the problem child
-A1 = rule1(m); 
+A1 = rule1(m); %%Fails on 9x9, all other rules good!
 A2 = rule2(m);
 A3 = rule3(m);
 A4 = rule4(m);
@@ -61,6 +61,7 @@ A4 = rule4(m);
 A = [A1;A2;A3;A4;A5];%%Construct giant matrix
 %%This matrix (B) is only for getting b for matrices A1-A4
 B = [A1;A2;A3;A4];
+
 %%Get size of B matrix to correctly set b for A1-A4
 [r,c] = size(B);
 %%b vector is all ones to enforce rules with exception to b5, nice and easy
@@ -74,6 +75,8 @@ subject to
 A*binaryProblem==b;
 cvx_end
 
+%%Show initialProblem again for comparison
+disp(initialProblem)
 %%Restore to original matrix form
 solution = convert_to_integer(binaryProblem)
 

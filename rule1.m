@@ -27,10 +27,11 @@ constraints = 0;
 %%to keep track of pre jump locations
 lastPositionBeforeJump = 0;
 %%boolean to only set above value exactly once
-jumped = 0;
+jumped = 1;
 
 %%Nsquared = number of constraints
 for i = 1:Nsquared
+%%for i = 1:9
     %%updateCell used to jump around constraint
     updateCell = step;
 
@@ -48,16 +49,20 @@ for i = 1:Nsquared
             %%be N
             if(cellsSet == reset)
                 %%jump exactly once
-                if(jumped == 0)
-                    %%Store prejump pos
-                    lastPositionBeforeJump = updateCell;
-                    jumped = 1;
+                if(jumped < reset)
+                    %%Store prejump pos, only want to store the FIRST jump
+                    if(jumped == 1)
+                        lastPositionBeforeJump = updateCell;
+                    end
+                    %%make jump
+                    updateCell = (Nsquared * jumped) + step;
+                    cellsSet = 0;
+                    jumped = jumped + 1;
+                else
+                    updateCell = (Nsquared) + step;
+                    cellsSet = 0;
                 end
-                
-                %%make jump
-                updateCell = Nsquared + step;
-                cellsSet = 0;
- 
+
             else
                 updateCell = updateCell + N;
             end
@@ -68,7 +73,7 @@ for i = 1:Nsquared
     %%We have now set an additional constraint
     constraints = constraints + 1;
     %%reset jumped
-    jumped = 0;
+    jumped = 1;
     
     %%If set N constraints, time to jump right
     if (constraints == N)
