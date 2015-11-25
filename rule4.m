@@ -1,5 +1,5 @@
 function [A4] = rule4(size)
-%%Each integer (1-m (number of rows))should only show up once: in each space
+%%RULE 4: Each integer (1-m (number of rows))should only show up once: in each space
 %%Input: number of rows of original prob (N) in order to build matrix
 %%Output: an (NN) matrix formatted s.t. it constrains problem to rule 4
 

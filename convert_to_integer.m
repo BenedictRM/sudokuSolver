@@ -12,6 +12,7 @@ cubeRootRows = int8(rows^(1/3));%%be sure to cast to 8 bit int
 integerSudoku = zeros(cubeRootRows,cubeRootRows);%%reform square matrix
 [m,n] = size(integerSudoku);%%Store the number of rows and columns assoc with this
 curRow = 1;%%Start at row one and go
+binarySudoku = int8(binarySudoku);%%cast elements in binarySudoku to int since they may not be ints 
 
 %%Restore original problem
 for intRow = 1:m
@@ -20,6 +21,7 @@ for intRow = 1:m
     i = 1;
         %%Discover the cell value
         while(i <= cubeRootRows)%%cubeRootRows represents the number of possible ints
+            
             if(binarySudoku(curRow,1) == 1)
                 cellVal = i;
             end

@@ -17,7 +17,6 @@ for i = 1:Nsquared
     %%updateCell used to jump around constraint
     updateCell = i;
     
-    %%***if problems occur DELETE THIS IDEA
     %%Keep track of number of cells getting set
     numberOfCellsSet = 0;
     
