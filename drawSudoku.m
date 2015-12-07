@@ -1,7 +1,7 @@
 %%From http://www.mathworks.com/help/optim/ug/solve-sudoku-puzzles-via-integer-programming.html
 %%I wanted a way to format output, and mathworks provides one!
 %%I edited the original function s.t. it was more arbitrary than 9x9
-function drawSudoku(B)
+function drawSudoku(B, windowTitle)
 % Function for drawing the Sudoku board
 %   Copyright 2014 The MathWorks, Inc. 
 
@@ -9,7 +9,7 @@ function drawSudoku(B)
 
 %9x9
 if(m == 9)
-    figure;hold on;axis off;axis equal % prepare to draw
+    figure('name',windowTitle);hold on;axis off;axis equal % prepare to draw
     rectangle('Position',[0 0 9 9],'LineWidth',3,'Clipping','off') % outside border
     rectangle('Position',[3,0,3,9],'LineWidth',2) % heavy vertical lines
     rectangle('Position',[0,3,9,3],'LineWidth',2) % heavy horizontal lines
@@ -23,7 +23,7 @@ end
 
 %4x4
 if(m==4)
-    figure;hold on;axis off;axis equal % prepare to draw
+    figure('name',windowTitle);hold on;axis off;axis equal % prepare to draw
     rectangle('Position',[0 0 4 4],'LineWidth',3,'Clipping','off') % outside border
     rectangle('Position',[2,0,2,4],'LineWidth',2) % heavy vertical lines
     rectangle('Position',[0,2,4,2],'LineWidth',2) % heavy horizontal lines

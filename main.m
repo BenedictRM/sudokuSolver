@@ -32,12 +32,16 @@ Each integer (1-m (number of rows))should only show up once:
 %%initialProblem = ([7,2,3,0,0,0,1,5,9;6,0,0,3,0,2,0,0,8;8,0,0,0,1,0,0,0,2;0,7,0,6,5,4,0,2,0;0,0,4,2,0,7,3,0,0;0,5,0,9,3,1,0,4,0;5,0,0,0,7,0,0,0,3;4,0,0,1,0,3,0,0,6;9,3,2,0,0,0,7,1,4])
 %%3
 %%initialProblem = ([1,0,0,0,0,0,0,0,9;0,4,0,2,6,1,0,3,0;0,6,0,0,5,0,0,1,0;0,0,5,6,0,3,4,0,0;8,1,4,7,0,5,3,9,6;0,0,9,0,1,0,7,0,0;0,0,0,9,3,4,0,0,0;4,8,0,5,7,2,0,6,3;3,0,0,0,0,0,0,0,5])
+%%7
+initialProblem = ([0,8,9,4,0,1,7,3,0;4,0,2,0,0,0,8,0,9;7,3,0,8,0,6,0,5,4;8,0,3,0,4,0,6,0,1;0,0,0,3,0,9,0,0,0;2,0,5,0,6,0,9,0,3;1,2,0,7,0,4,0,9,8;9,0,4,0,0,0,1,0,7;0,7,8,9,0,2,4,6,0])
 
 %%Difficult 9x9
 %%1
 %%initialProblem = ([0,0,4,0,0,0,3,0,0;2,0,0,7,0,9,0,0,8;0,6,0,5,0,4,0,7,0;0,0,5,0,7,0,2,0,0;4,0,0,3,0,5,0,0,9;0,0,7,0,9,0,5,0,0;0,4,0,9,0,2,0,5,0;8,0,0,6,0,7,0,0,2;0,0,9,0,0,0,1,0,0])
 %%2
-initialProblem = ([1,5,0,3,0,6,0,8,9;4,0,0,0,0,0,0,0,2;0,0,0,4,2,8,0,0,0;9,0,5,0,3,0,8,0,6;0,0,3,1,0,9,7,0,0;2,0,6,0,5,0,3,0,1;0,0,0,2,1,3,0,0,0;7,0,0,0,0,0,0,0,3;3,9,0,6,0,7,0,5,8])
+%%initialProblem = ([1,5,0,3,0,6,0,8,9;4,0,0,0,0,0,0,0,2;0,0,0,4,2,8,0,0,0;9,0,5,0,3,0,8,0,6;0,0,3,1,0,9,7,0,0;2,0,6,0,5,0,3,0,1;0,0,0,2,1,3,0,0,0;7,0,0,0,0,0,0,0,3;3,9,0,6,0,7,0,5,8])
+%%6
+%%initialProblem = ([0,4,0,7,0,3,0,6,0;0,1,0,6,0,8,0,2,0;0,0,3,0,9,0,8,0,0;0,0,4,0,7,0,9,0,0;2,0,0,0,6,0,0,0,8;0,0,7,0,1,0,6,0,0;0,0,5,0,3,0,7,0,0;0,7,0,9,0,1,0,3,0;0,3,0,4,0,7,0,8,0])
 
 %%Hold original problem size:
 [m,n] = size(initialProblem);
@@ -74,6 +78,7 @@ B = [A1;A2;A3;A4];
 %%b vector is all ones to enforce rules with exception to b5, nice and easy
 b = [ones(r,1);b5];
 
+
 %%CVX Solver
 cvx_begin
 variables binaryProblem(Ncubed)
@@ -82,14 +87,28 @@ subject to
 A*binaryProblem==b;
 cvx_end
 
+%%linprog sol
+[m, n] = size(A); 
+f = [zeros(n, 1); ones(n, 1)];
+Ai = [-eye(n), -eye(n); eye(n), -eye(n)];
+bi = zeros(2*n, 1);
+t = linprog(f, Ai, bi, [A, zeros(m, n)], b, [],[],[],'options');
+t = t(1:n);
+sol = convert_to_integer(t);
+fprintf('LinProg solution:\n')
+disp(sol)
+
+
 %%Restore to original matrix form
 solution = convert_to_integer(binaryProblem);
 
 %%draw sudoku function only set up for 4x4 or 9x9 problems
 if(N == 4 || N == 9)
-    drawSudoku(initialProblem)
-    drawSudoku(solution)
-    
+    drawSudoku(initialProblem, 'Initial Problem Clues')
+    drawSudoku(solution, 'CVX Solution')
+    drawSudoku(sol, 'LinProg Solution')
+
+%%Sudoku problem not 4x4 or 9x9
 else
     %%Show initialProblem again for comparison
     disp(initialProblem)
